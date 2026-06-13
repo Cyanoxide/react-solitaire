@@ -55,11 +55,21 @@
             align-self: stretch;
         }
 
-        // Top-level highlight: on hover (when interactive) and while open
+        // Top-level highlight: on hover (when interactive) and while open.
+        // Highlight colour follows the active theme (blue / olive / silver)
         &[data-disabled="false"]:hover,
         &[data-open="true"] {
             color: #fff;
             background-color: #4069bf;
+
+            @include theme-color("green") {
+                background-color: #95a075;
+            }
+
+            @include theme-color("silver") {
+                background-color: #b5b7c8;
+                color: #000;
+            }
         }
     }
 
@@ -103,6 +113,15 @@
         &[data-disabled="false"]>button:hover {
             background-color: #316ac5;
             color: #fff;
+
+            @include theme-color("green") {
+                background-color: #95a075;
+            }
+
+            @include theme-color("silver") {
+                background-color: #b5b7c8;
+                color: #000;
+            }
         }
     }
 
