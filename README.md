@@ -21,7 +21,7 @@ npm install github:Cyanoxide/react-solitaire
 import { Solitaire } from "react-solitaire";
 import "react-solitaire/style.css";
 
-<Solitaire />;
+<Solitaire />
 ```
 
 ## Standalone
