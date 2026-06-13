@@ -6,6 +6,10 @@
     border-bottom: 0.1rem solid #dedaca;
     color: #000;
     min-height: 2.3rem;
+    // Sit above the felt/cards so open dropdowns are not painted over by the
+    // board (which is a sibling with its own stacking context)
+    position: relative;
+    z-index: 5;
 
     // Self-contained box model (the menu sits outside .solitaire, so it can't
     // rely on that subtree's reset or the host page's)
@@ -22,7 +26,6 @@
     .menuInner {
         display: flex;
         align-items: stretch;
-        overflow: hidden;
         width: 100%;
     }
 
@@ -35,28 +38,82 @@
     }
 
     .menuItem {
+        position: relative;
         display: flex;
         align-items: center;
         // 1px gap on every side so the menu bar stays visible around the hover
         margin: 0.1rem;
-        padding: 0 0.55rem;
 
-        &:hover {
-            color: #fff;
-            background-color: #4069bf;
-            cursor: not-allowed;
-        }
-
-        // Render as flat text rather than a native button (the host page is
-        // not assumed to provide a global form reset)
-        button {
+        &>button {
             border: none;
             background: none;
-            padding: 0;
+            padding: 0 0.55rem;
             margin: 0;
             font: inherit;
             color: inherit;
-            cursor: not-allowed;
+            cursor: default;
+            align-self: stretch;
         }
+
+        // Top-level highlight: on hover (when interactive) and while open
+        &[data-disabled="false"]:hover,
+        &[data-open="true"] {
+            color: #fff;
+            background-color: #4069bf;
+        }
+    }
+
+    // ---- Dropdown ----------------------------------------------------------
+    .dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin: 0;
+        padding: 0.2rem 0;
+        list-style: none;
+        min-width: 15rem;
+        background: #fff;
+        color: #000;
+        border: 0.1rem solid #aca899;
+        box-shadow: 0.2rem 0.2rem 0.4rem #00000033;
+        z-index: 10;
+    }
+
+    .dropdownItem {
+        &>button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            width: 100%;
+            border: none;
+            background: none;
+            font: inherit;
+            color: inherit;
+            text-align: left;
+            white-space: nowrap;
+            padding: 0.4rem 1.4rem 0.4rem 1.8rem;
+            cursor: default;
+        }
+
+        &[data-disabled="true"]>button {
+            color: #8c8c8c;
+        }
+
+        &[data-disabled="false"]>button:hover {
+            background-color: #316ac5;
+            color: #fff;
+        }
+    }
+
+    .shortcut {
+        color: inherit;
+    }
+
+    .separator {
+        height: 0;
+        margin: 0.3rem 0.25rem;
+        border-top: 0.1rem solid #d6d3c4;
+        list-style: none;
     }
 }

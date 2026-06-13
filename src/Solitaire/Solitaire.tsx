@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "../components/Button/Button";
 import WindowMenu from "../components/WindowMenu/WindowMenu";
+import type { WindowMenuDef } from "../components/WindowMenu/WindowMenu";
 import Card from "./Card/Card";
 import styles from "./Solitaire.module.scss";
 import WinAnimation from "./WinAnimation/WinAnimation";
@@ -134,9 +135,36 @@ const Solitaire = () => {
         setShowDealPrompt(true);
     };
 
+    // Menu definitions. Items are wired up on their own branches; for now the
+    // dropdowns open with every option greyed out.
+    const menus: WindowMenuDef[] = [
+        {
+            label: "Game",
+            items: [
+                { label: "Deal", shortcut: "F2", disabled: true },
+                { label: "Undo", disabled: true },
+                { separator: true },
+                { label: "Deck...", disabled: true },
+                { label: "Options...", disabled: true },
+                { separator: true },
+                { label: "Exit", disabled: true },
+            ],
+        },
+        {
+            label: "Help",
+            items: [
+                { label: "Contents", disabled: true },
+                { label: "Search for Help on...", disabled: true },
+                { label: "Using Help", disabled: true },
+                { separator: true },
+                { label: "About Solitaire", disabled: true },
+            ],
+        },
+    ];
+
     return (
         <>
-            <WindowMenu menuItems={["Game", "Help"]}/>
+            <WindowMenu menus={menus}/>
             <div className={styles.solitaire}>
                 <main className={styles.main}>
                     <div className={styles.topRow}>
