@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import type { CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { CSSProperties, Dispatch, SetStateAction } from "react";
 import Button from "../components/Button/Button";
 import WindowMenu from "../components/WindowMenu/WindowMenu";
 import type { WindowMenuDef } from "../components/WindowMenu/WindowMenu";
@@ -82,10 +82,32 @@ const createInitialBoardState = (): BoardState => {
 const Solitaire = () => {
     const [boardState, setBoardState] = useState<BoardState>(createInitialBoardState);
     const [showDealPrompt, setShowDealPrompt] = useState(false);
+    const [canUndo, setCanUndo] = useState(false);
     // Applied card-back index; deckDialogBack is the pending selection while the
     // Select Card Back dialog is open (null = closed)
     const [cardBack, setCardBack] = useState(0);
     const [deckDialogBack, setDeckDialogBack] = useState<number | null>(null);
+
+    // Single-level undo (XP-authentic): snapshot the state before each move,
+    // restore it once, then grey Undo out until the next move
+    const boardStateRef = useRef(boardState);
+    const undoSnapshotRef = useRef<BoardState | null>(null);
+    useEffect(() => { boardStateRef.current = boardState; });
+
+    // Wraps setBoardState for player moves so each move records an undo point.
+    // Passed to Card and the deck; the win animation keeps the raw setter.
+    const commitBoard: Dispatch<SetStateAction<BoardState>> = (update) => {
+        undoSnapshotRef.current = boardStateRef.current;
+        setCanUndo(true);
+        setBoardState(update);
+    };
+
+    const handleUndo = () => {
+        if (!undoSnapshotRef.current) return;
+        setBoardState(undoSnapshotRef.current);
+        undoSnapshotRef.current = null;
+        setCanUndo(false);
+    };
 
     // Latch the win once every foundation is complete. It must be state, not a
     // derived value: the win animation pops the foundations as it plays, so a
@@ -104,6 +126,8 @@ const Solitaire = () => {
             if (event.key === "F2") {
                 event.preventDefault();
                 setShowDealPrompt(false);
+                undoSnapshotRef.current = null;
+                setCanUndo(false);
                 setBoardState(createInitialBoardState());
             }
         };
@@ -114,7 +138,7 @@ const Solitaire = () => {
     if (!boardState.board) return;
 
     const handleDeckOnClick = () => {
-        setBoardState((prev: BoardState) => {
+        commitBoard((prev: BoardState) => {
             if (prev.deck.length) {
                 return {
                     ...prev,
@@ -143,6 +167,8 @@ const Solitaire = () => {
 
     const handleNewGame = () => {
         setShowDealPrompt(false);
+        undoSnapshotRef.current = null;
+        setCanUndo(false);
         setBoardState(createInitialBoardState());
     };
 
@@ -163,7 +189,7 @@ const Solitaire = () => {
             label: "Game",
             items: [
                 { label: "Deal", shortcut: "F2", onClick: handleNewGame },
-                { label: "Undo", disabled: true },
+                { label: "Undo", onClick: handleUndo, disabled: !canUndo },
                 { separator: true },
                 { label: "Deck...", onClick: () => setDeckDialogBack(cardBack) },
                 { label: "Options...", disabled: true },
@@ -194,13 +220,13 @@ const Solitaire = () => {
                                 {boardState.deck.slice(0, 3).map((card) => <Card key={card.id} {...card}/>)}
                             </div>
                             <div className={styles.waste}>
-                                {boardState.waste.slice(-Math.abs(boardState.wasteCount)).map((card) => <Card key={card.id} rank={card.rank} suit={card.suit} isFaceUp={true} setBoardState={setBoardState}/>)}
+                                {boardState.waste.slice(-Math.abs(boardState.wasteCount)).map((card) => <Card key={card.id} rank={card.rank} suit={card.suit} isFaceUp={true} setBoardState={commitBoard}/>)}
                             </div>
                         </div>
                         <div className={styles.foundations}>
                             {boardState.foundations.map((item, index) => (
                                 <div key={index} data-foundation={index}>
-                                    {item.map((card) => <Card key={card.id} setBoardState={setBoardState} {...card}/>)}
+                                    {item.map((card) => <Card key={card.id} setBoardState={commitBoard} {...card}/>)}
                                 </div>
                             ))}
                         </div>
@@ -209,7 +235,7 @@ const Solitaire = () => {
                         {boardState.board.map((item, index) => {
                             return (
                                 <div key={index} className={styles.column} data-column={index}>
-                                    {item.map((card) => <Card key={card.id} setBoardState={setBoardState} {...card}/>)}
+                                    {item.map((card) => <Card key={card.id} setBoardState={commitBoard} {...card}/>)}
                                 </div>
                             );
                         })}
