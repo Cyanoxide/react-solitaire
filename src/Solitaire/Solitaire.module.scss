@@ -274,13 +274,14 @@
             &:checked::after {
                 content: "";
                 position: absolute;
-                left: 0.38rem;
-                top: 0.05rem;
+                left: 50%;
+                top: 50%;
                 width: 0.35rem;
                 height: 0.7rem;
                 border: solid #4a9e3a;
                 border-width: 0 0.2rem 0.2rem 0;
-                transform: rotate(45deg);
+                // centre on the box, lifted slightly so the rotated tick reads centred
+                transform: translate(-50%, -60%) rotate(45deg);
             }
         }
     }
