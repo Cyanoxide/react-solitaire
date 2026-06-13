@@ -221,19 +221,24 @@ const Solitaire = () => {
                 )}
                 {optionsOpen && (
                     <div className={styles.dialog}>
-                        <div className={styles.dialogTitleBar}>Options</div>
+                        <div className={styles.dialogTitleBar}>
+                            <span>Options</span>
+                            <button type="button" className={styles.dialogClose} aria-label="Close" onClick={() => setOptionsOpen(false)}>✕</button>
+                        </div>
                         <div className={styles.dialogBody}>
-                            <fieldset className={styles.optionGroup}>
-                                <legend>Draw</legend>
-                                <label><input type="radio" name="draw" checked={pendingDraw === 1} onChange={() => setPendingDraw(1)} /> Draw one</label>
-                                <label><input type="radio" name="draw" checked={pendingDraw === 3} onChange={() => setPendingDraw(3)} /> Draw three</label>
-                            </fieldset>
-                            <fieldset className={styles.optionGroup}>
-                                <legend>Scoring</legend>
-                                <label><input type="checkbox" checked={pendingScoring} onChange={(event) => setPendingScoring(event.target.checked)} /> Enable scoring</label>
-                            </fieldset>
+                            <div className={styles.optionGroups}>
+                                <fieldset className={styles.optionGroup}>
+                                    <legend>Draw</legend>
+                                    <label><input type="radio" name="draw" checked={pendingDraw === 1} onChange={() => setPendingDraw(1)} /> Draw One</label>
+                                    <label><input type="radio" name="draw" checked={pendingDraw === 3} onChange={() => setPendingDraw(3)} /> Draw Three</label>
+                                </fieldset>
+                                <fieldset className={styles.optionGroup}>
+                                    <legend>Scoring</legend>
+                                    <label><input type="checkbox" checked={pendingScoring} onChange={(event) => setPendingScoring(event.target.checked)} /> Standard</label>
+                                </fieldset>
+                            </div>
                             <div className={styles.dialogButtons}>
-                                <Button onClick={() => { setDrawCount(pendingDraw); setScoring(pendingScoring); setOptionsOpen(false); }}>OK</Button>
+                                <Button data-primary onClick={() => { setDrawCount(pendingDraw); setScoring(pendingScoring); setOptionsOpen(false); }}>OK</Button>
                                 <Button onClick={() => setOptionsOpen(false)}>Cancel</Button>
                             </div>
                         </div>

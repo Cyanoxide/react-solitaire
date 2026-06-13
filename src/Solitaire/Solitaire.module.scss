@@ -150,6 +150,33 @@
         text-shadow: 0.1rem 0.1rem 0.1rem #162abe;
     }
 
+    // XP-style red close button in the dialog title bar
+    .dialogClose {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.2rem;
+        height: 1.9rem;
+        padding: 0;
+        border: 0.1rem solid #f4c9c2;
+        border-radius: 0.3rem;
+        background: linear-gradient(180deg, #f3a496 0%, #e15a48 45%, #c8341d 100%);
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: inset 0 0.1rem 0 #ffffff66;
+
+        &:hover {
+            filter: brightness(1.08);
+        }
+
+        &:active {
+            filter: brightness(0.95);
+        }
+    }
+
     .dialogBody {
         background: #ece9d8;
         color: #000;
@@ -181,12 +208,18 @@
         }
     }
 
-    // Options dialog: grouped fieldsets for Draw and Scoring
+    // Options dialog: Draw and Scoring groups sit side by side
+    .optionGroups {
+        display: flex;
+        gap: 1.2rem;
+        margin-bottom: 1.4rem;
+    }
+
     .optionGroup {
+        flex: 1;
         border: 0.1rem solid #aca899;
         border-radius: 0.2rem;
         padding: 1rem 1.4rem 1.4rem;
-        margin-bottom: 1.4rem;
 
         legend {
             padding: 0 0.4rem;
@@ -199,6 +232,11 @@
             gap: 0.6rem;
             margin: 0.5rem 0;
             cursor: pointer;
+            white-space: nowrap;
+        }
+
+        input {
+            accent-color: #2f6bf6;
         }
     }
 
