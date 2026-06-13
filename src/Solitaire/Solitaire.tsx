@@ -98,6 +98,19 @@ const Solitaire = () => {
         }
     }, [boardState.foundations, boardState.win]);
 
+    // F2 deals a new game (the Game menu advertises this shortcut)
+    useEffect(() => {
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "F2") {
+                event.preventDefault();
+                setShowDealPrompt(false);
+                setBoardState(createInitialBoardState());
+            }
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, []);
+
     if (!boardState.board) return;
 
     const handleDeckOnClick = () => {
@@ -149,7 +162,7 @@ const Solitaire = () => {
         {
             label: "Game",
             items: [
-                { label: "Deal", shortcut: "F2", disabled: true },
+                { label: "Deal", shortcut: "F2", onClick: handleNewGame },
                 { label: "Undo", disabled: true },
                 { separator: true },
                 { label: "Deck...", onClick: () => setDeckDialogBack(cardBack) },
