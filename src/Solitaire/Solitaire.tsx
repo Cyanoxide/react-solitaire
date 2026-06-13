@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { Dispatch, SetStateAction } from "react";
+import type { CSSProperties, Dispatch, SetStateAction } from "react";
 import Button from "../components/Button/Button";
 import WindowMenu from "../components/WindowMenu/WindowMenu";
 import type { WindowMenuDef } from "../components/WindowMenu/WindowMenu";
@@ -37,6 +37,9 @@ const shuffle = (array: CardType[]) => {
 
     return shuffled;
 };
+
+// Number of card-back designs in the sprite sheet (row 4, columns 0-11)
+const CARD_BACK_COUNT = 12;
 
 const suits = ["hearts", "diamonds", "clubs", "spades"] as const;
 const deck: CardType[] = suits.flatMap((suit) =>
@@ -80,6 +83,10 @@ const Solitaire = () => {
     const [boardState, setBoardState] = useState<BoardState>(createInitialBoardState);
     const [showDealPrompt, setShowDealPrompt] = useState(false);
     const [canUndo, setCanUndo] = useState(false);
+    // Applied card-back index; deckDialogBack is the pending selection while the
+    // Select Card Back dialog is open (null = closed)
+    const [cardBack, setCardBack] = useState(0);
+    const [deckDialogBack, setDeckDialogBack] = useState<number | null>(null);
 
     // Single-level undo (XP-authentic): snapshot the state before each move,
     // restore it once, then grey Undo out until the next move
@@ -112,6 +119,21 @@ const Solitaire = () => {
             setBoardState((prev) => ({ ...prev, win: true }));
         }
     }, [boardState.foundations, boardState.win]);
+
+    // F2 deals a new game (the Game menu advertises this shortcut)
+    useEffect(() => {
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "F2") {
+                event.preventDefault();
+                setShowDealPrompt(false);
+                undoSnapshotRef.current = null;
+                setCanUndo(false);
+                setBoardState(createInitialBoardState());
+            }
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, []);
 
     if (!boardState.board) return;
 
@@ -166,10 +188,10 @@ const Solitaire = () => {
         {
             label: "Game",
             items: [
-                { label: "Deal", shortcut: "F2", disabled: true },
+                { label: "Deal", shortcut: "F2", onClick: handleNewGame },
                 { label: "Undo", onClick: handleUndo, disabled: !canUndo },
                 { separator: true },
-                { label: "Deck...", disabled: true },
+                { label: "Deck...", onClick: () => setDeckDialogBack(cardBack) },
                 { label: "Options...", disabled: true },
                 { separator: true },
                 { label: "Exit", disabled: true },
@@ -190,7 +212,7 @@ const Solitaire = () => {
     return (
         <>
             <WindowMenu menus={menus}/>
-            <div className={styles.solitaire}>
+            <div className={styles.solitaire} style={{ "--card-back": cardBack } as CSSProperties}>
                 <main className={styles.main}>
                     <div className={styles.topRow}>
                         <div className={styles.pileRow}>
@@ -221,13 +243,37 @@ const Solitaire = () => {
                 </main>
                 {boardState.win && <WinAnimation foundations={boardState.foundations} onCardLaunch={handleCardLaunch} onComplete={handleAnimationComplete} />}
                 {showDealPrompt && (
-                    <div className={styles.dealPrompt}>
-                        <div className={styles.dealPromptTitleBar}>Solitaire</div>
-                        <div className={styles.dealPromptBody}>
+                    <div className={styles.dialog}>
+                        <div className={styles.dialogTitleBar}>Solitaire</div>
+                        <div className={`${styles.dialogBody} ${styles.dealPromptBody}`}>
                             <p>Do you want to deal again?</p>
-                            <div className={styles.dealPromptButtons}>
+                            <div className={styles.dialogButtons}>
                                 <Button onClick={handleNewGame}>Yes</Button>
                                 <Button onClick={() => setShowDealPrompt(false)}>No</Button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {deckDialogBack !== null && (
+                    <div className={styles.dialog}>
+                        <div className={styles.dialogTitleBar}>Select Card Back</div>
+                        <div className={styles.dialogBody}>
+                            <div className={styles.cardBackGrid}>
+                                {Array.from({ length: CARD_BACK_COUNT }, (_, index) => (
+                                    <button
+                                        key={index}
+                                        type="button"
+                                        className={styles.cardBackOption}
+                                        data-selected={index === deckDialogBack}
+                                        style={{ "--back-index": index } as CSSProperties}
+                                        onClick={() => setDeckDialogBack(index)}
+                                        onDoubleClick={() => { setCardBack(index); setDeckDialogBack(null); }}
+                                    />
+                                ))}
+                            </div>
+                            <div className={styles.dialogButtons}>
+                                <Button onClick={() => { setCardBack(deckDialogBack); setDeckDialogBack(null); }}>OK</Button>
+                                <Button onClick={() => setDeckDialogBack(null)}>Cancel</Button>
                             </div>
                         </div>
                     </div>

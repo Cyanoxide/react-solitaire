@@ -38,6 +38,8 @@
 
         &.faceDown {
             background-position-y: calc(4 * var(--y-offset));
+            // --card-back (set on the board root) selects which back design
+            background-position-x: calc(var(--card-back, 0) * var(--x-offset));
         }
     }
 
