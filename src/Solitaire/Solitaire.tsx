@@ -238,9 +238,13 @@ const Solitaire = () => {
                             <div className={styles.deck} onClick={handleDeckOnClick}>
                                 {boardState.deck.slice(0, 3).map((card) => <Card key={card.id} {...card}/>)}
                             </div>
-                            <div className={styles.waste}>
-                                {/* show at most wasteCount cards, but never 0 (slice(-0) returns the whole pile) */}
-                                {boardState.waste.slice(-Math.max(1, boardState.wasteCount)).map((card, index, shown) => <Card key={card.id} rank={card.rank} suit={card.suit} isFaceUp={true} isPlayable={index === shown.length - 1} setBoardState={commitBoard}/>)}
+                            <div className={styles.waste} data-draw={drawCount}>
+                                {/* Render up to three waste cards: the top one plus as many as
+                                    two beneath it. Draw-three fans them so each value shows;
+                                    draw-one barely offsets them (see .waste[data-draw="1"]) so the
+                                    pile's depth is hinted and the card beneath is there to reveal
+                                    the moment the top one is dragged. */}
+                                {boardState.waste.slice(-3).map((card, index, shown) => <Card key={card.id} rank={card.rank} suit={card.suit} isFaceUp={true} isPlayable={index === shown.length - 1} setBoardState={commitBoard}/>)}
                             </div>
                         </div>
                         <div className={styles.foundations}>

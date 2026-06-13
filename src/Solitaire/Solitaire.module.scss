@@ -47,6 +47,13 @@
             margin-top: 0;
             margin-left: -11cqw;
         }
+
+        // Draw one: the cards beneath peek out by a hair (0.3rem) — just enough to
+        // show the pile has depth, not which cards they are (unlike the wide
+        // draw-three fan). A full card-width overlap minus the sliver.
+        &[data-draw="1"]>div:not(:first-child) {
+            margin-left: calc(-14.28cqw + 0.3rem);
+        }
     }
 
     .deck {
