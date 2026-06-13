@@ -117,52 +117,86 @@
         margin-top: -18.5cqw;
     }
 
-    // Styled to match the active window chrome in Window.module.scss
-    .dealPrompt {
+    // Shared XP dialog chrome (matches the active window chrome in react-xp's
+    // Window.module.scss). Used by the deal-again prompt and the Deck dialog.
+    .dialog {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        z-index: 3;
+        z-index: 4;
         min-width: 22rem;
         background: #162abe;
         padding: 0 0.3rem 0.3rem;
         border-radius: 0.9rem 0.9rem 0.1rem 0.1rem;
         overflow: hidden;
         box-shadow: inset 0 0 0.1rem 0.1rem #0004, 0.2rem 0.3rem 0.8rem #0006;
+    }
 
-        .dealPromptTitleBar {
-            display: flex;
-            align-items: center;
-            height: 2.9rem;
-            margin: 0 -0.3rem;
-            padding: 0 0.8rem;
-            background: linear-gradient(180deg, #2e61e4 0%, #5292f7 6%, #255ae1 25%, #2f6bf6 80%, #1133a0 100%);
-            box-shadow: inset 0.1rem 0 0.3rem #162abe, inset -0.1rem 0 0.3rem #162ab0;
-            border-radius: 0.8rem 0.8rem 0 0;
-            color: #fff;
-            font-family: Trebuchet MS;
-            font-weight: 600;
-            font-size: 1.1rem;
-            text-shadow: 0.1rem 0.1rem 0.1rem #162abe;
+    .dialogTitleBar {
+        display: flex;
+        align-items: center;
+        height: 2.9rem;
+        margin: 0 -0.3rem;
+        padding: 0 0.8rem;
+        background: linear-gradient(180deg, #2e61e4 0%, #5292f7 6%, #255ae1 25%, #2f6bf6 80%, #1133a0 100%);
+        box-shadow: inset 0.1rem 0 0.3rem #162abe, inset -0.1rem 0 0.3rem #162ab0;
+        border-radius: 0.8rem 0.8rem 0 0;
+        color: #fff;
+        font-family: Trebuchet MS;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-shadow: 0.1rem 0.1rem 0.1rem #162abe;
+    }
+
+    .dialogBody {
+        background: #ece9d8;
+        color: #000;
+        padding: 1.4rem 1.6rem 1.2rem;
+    }
+
+    .dialogButtons {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    // Deal-again prompt: centre the question above the buttons
+    .dealPromptBody {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        p {
+            margin: 0 0 1.2rem;
         }
+    }
 
-        .dealPromptBody {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: #ece9d8;
-            color: #000;
-            padding: 1.4rem 1.6rem 1.2rem;
+    // Select Card Back dialog: 2 x 6 grid of selectable backs
+    .cardBackGrid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0.8rem;
+        margin-bottom: 1.4rem;
+    }
 
-            p {
-                margin: 0 0 1.2rem;
-            }
+    .cardBackOption {
+        width: 7.5rem;
+        aspect-ratio: 44 / 57;
+        padding: 0;
+        cursor: pointer;
+        // No chrome of its own — the sprite already has the card's edge; the
+        // selected back gets a highlight ring
+        appearance: none;
+        border: none;
+        background-color: transparent;
+        background-image: url("/spritemap__solitaire-cards.png");
+        background-size: 1300% 600%;
+        background-position: calc(var(--back-index) * 8.332%) calc(4 * 20%);
 
-            .dealPromptButtons {
-                display: flex;
-                gap: 0.75rem;
-            }
+        &[data-selected="true"] {
+            outline: 0.2rem solid #2f6bf6;
+            outline-offset: 0.1rem;
         }
     }
 }
