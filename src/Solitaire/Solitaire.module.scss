@@ -48,10 +48,11 @@
             margin-left: -11cqw;
         }
 
-        // Draw one: the card beneath sits exactly behind the top card (full
-        // card-width overlap), so dragging the top reveals it with no empty gap
+        // Draw one: the cards beneath peek out by a hair (≈2px) — just enough to
+        // show the pile has depth, not which cards they are (unlike the wide
+        // draw-three fan). A full card-width overlap minus the 2px sliver.
         &[data-draw="1"]>div:not(:first-child) {
-            margin-left: -14.28cqw;
+            margin-left: calc(-14.28cqw + 0.2rem);
         }
     }
 
