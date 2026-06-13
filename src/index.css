@@ -1,0 +1,40 @@
+/* Standalone full-screen shell. Matches react-xp's 10px rem base so the
+   component's rem values render identically here. (When consumed as a
+   component, the host page provides its own base; this file is app-only.) */
+:root {
+    font-size: 10px;
+    font-family: Tahoma, Helvetica, Arial, sans-serif;
+    color-scheme: light;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+    background: #377d22;
+}
+
+button {
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+}
+
+/* Mirrors react-xp's window content area so the component lays out the same
+   full-screen as it does inside a window (menu bar + felt fill the viewport). */
+.solitaire-app {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}

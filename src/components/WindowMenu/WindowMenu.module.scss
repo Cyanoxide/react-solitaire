@@ -1,0 +1,42 @@
+.windowMenu {
+    display: flex;
+    justify-content: flex-start;
+    background: #f1f0eb;
+    border-bottom: 0.1rem solid #dedaca;
+    color: #000;
+    min-height: 2.3rem;
+
+    @include theme-color("silver") {
+        background-color: #f1f0f3;
+        border-bottom: 0.1rem solid #c1c6d6;
+    }
+
+    .menuInner {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .menuList {
+        display: flex;
+        position: absolute;
+        left: -0.15rem;
+        top: -0.15rem;
+        margin: 0 0.25rem;
+    }
+
+    .menuItem {
+        margin: 0.25rem 0;
+        padding: 0.25rem 0.625rem;
+
+        &:hover {
+            color: #fff;
+            background-color: #4069bf;
+            cursor: not-allowed;
+        }
+
+        button {
+            cursor: not-allowed;
+        }
+    }
+}
