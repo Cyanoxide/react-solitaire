@@ -6,9 +6,14 @@
     line-height: 1.6rem;
     border-radius: 0.3rem;
     background-image: linear-gradient(to top, #d8d4ca, #fff);
+    // Flex-centre the label so it stays centred at any button height, without
+    // depending on the host page's form reset (react-xp's preflight)
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     color: #000;
-    padding-inline: 0.75rem;
+    padding: 0 0.75rem;
 
     @include theme-color("silver") {
         &:not([disabled]) {
