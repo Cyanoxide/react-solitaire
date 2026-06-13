@@ -126,7 +126,10 @@
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 4;
-        min-width: 28rem;
+        // Keep the usual 28rem width, but never exceed the container (the host
+        // window), so dialogs stay consistent and never overflow
+        min-width: min(28rem, calc(100% - 1.6rem));
+        max-width: calc(100% - 1.6rem);
         background: #162abe;
         padding: 0 0.3rem 0.3rem;
         border-radius: 0.9rem 0.9rem 0.1rem 0.1rem;
@@ -236,7 +239,9 @@
     }
 
     .cardBackOption {
-        width: 7.5rem;
+        // Fill the grid cell so the backs scale with the dialog instead of
+        // forcing it wider than the container
+        width: 100%;
         aspect-ratio: 44 / 57;
         padding: 0;
         cursor: pointer;
