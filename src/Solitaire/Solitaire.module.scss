@@ -185,7 +185,11 @@
         aspect-ratio: 44 / 57;
         padding: 0;
         cursor: pointer;
-        border: 0.1rem solid #888;
+        // No chrome of its own — the sprite already has the card's edge; the
+        // selected back gets a highlight ring
+        appearance: none;
+        border: none;
+        background-color: transparent;
         background-image: url("/spritemap__solitaire-cards.png");
         background-size: 1300% 600%;
         background-position: calc(var(--back-index) * 8.332%) calc(4 * 20%);
@@ -193,7 +197,6 @@
         &[data-selected="true"] {
             outline: 0.2rem solid #2f6bf6;
             outline-offset: 0.1rem;
-            border-color: #2f6bf6;
         }
     }
 }
