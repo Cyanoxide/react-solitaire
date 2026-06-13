@@ -126,7 +126,10 @@
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 4;
-        min-width: 28rem;
+        // Keep the usual 28rem width, but never exceed the container (the host
+        // window), so dialogs stay consistent and never overflow
+        min-width: min(28rem, calc(100% - 1.6rem));
+        max-width: calc(100% - 1.6rem);
         background: #162abe;
         padding: 0 0.3rem 0.3rem;
         border-radius: 0.9rem 0.9rem 0.1rem 0.1rem;
@@ -149,7 +152,9 @@
         justify-content: space-between;
         height: 2.9rem;
         margin: 0 -0.3rem;
-        padding: 0 0.8rem;
+        // right gap matches the gap above the close button (it is centred in the
+        // 2.9rem bar → 0.5rem clear top/bottom, so 0.5rem on the right too)
+        padding: 0 0.5rem 0 0.8rem;
         background: linear-gradient(180deg, #2e61e4 0%, #5292f7 6%, #255ae1 25%, #2f6bf6 80%, #1133a0 100%);
         box-shadow: inset 0.1rem 0 0.3rem #162abe, inset -0.1rem 0 0.3rem #162ab0;
         border-radius: 0.8rem 0.8rem 0 0;
@@ -188,6 +193,13 @@
         box-shadow: inset 0 0 0 0.1rem #ae452744, inset 0.2rem 0.2rem 0.5rem #e4a491, inset -0.2rem -0.2rem 0.1rem #ae4527;
         background: radial-gradient(circle at 85% 85%, #cd512e 50%, #d45b34 70%, #e4a491 100%);
 
+        // Silver theme uses react-xp's flatter close button + outlined glyph
+        @include theme-color("silver") {
+            border-color: #a84c50;
+            box-shadow: none;
+            background: linear-gradient(to bottom, #f3deb5, #cc5c5e 10%);
+        }
+
         &:after {
             content: "";
             position: absolute;
@@ -196,6 +208,10 @@
             background-size: 7rem 1.7rem;
             background-position: -5.35rem center;
             background-repeat: no-repeat;
+
+            @include theme-color("silver") {
+                filter: opacity(1) drop-shadow(0.1rem -0.1rem 0 #943b38);
+            }
         }
 
         &:hover {
@@ -227,6 +243,12 @@
         }
     }
 
+    // The card-back dialog wants to be wide enough for comfortably-sized tiles,
+    // but never wider than the container (.dialog already caps max-width)
+    .deckDialog {
+        width: min(48rem, calc(100% - 1.6rem));
+    }
+
     // Select Card Back dialog: 2 x 6 grid of selectable backs
     .cardBackGrid {
         display: grid;
@@ -236,7 +258,9 @@
     }
 
     .cardBackOption {
-        width: 7.5rem;
+        // Fill the grid cell so the backs scale with the dialog instead of
+        // forcing it wider than the container
+        width: 100%;
         aspect-ratio: 44 / 57;
         padding: 0;
         cursor: pointer;
