@@ -204,6 +204,34 @@
         }
     }
 
+    // Select Card Back dialog: 2 x 6 grid of selectable backs
+    .cardBackGrid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0.8rem;
+        margin-bottom: 1.4rem;
+    }
+
+    .cardBackOption {
+        width: 7.5rem;
+        aspect-ratio: 44 / 57;
+        padding: 0;
+        cursor: pointer;
+        // No chrome of its own — the sprite already has the card's edge; the
+        // selected back gets a highlight ring
+        appearance: none;
+        border: none;
+        background-color: transparent;
+        background-image: url("/spritemap__solitaire-cards.png");
+        background-size: 1300% 600%;
+        background-position: calc(var(--back-index) * 8.332%) calc(4 * 20%);
+
+        &[data-selected="true"] {
+            outline: 0.2rem solid #2f6bf6;
+            outline-offset: 0.1rem;
+        }
+    }
+
     // Options dialog: Draw and Scoring groups sit side by side
     .optionGroups {
         display: flex;
