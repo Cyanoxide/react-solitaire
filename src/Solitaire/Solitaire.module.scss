@@ -152,8 +152,9 @@
         justify-content: space-between;
         height: 2.9rem;
         margin: 0 -0.3rem;
-        // tighter on the right so the close button sits near the edge (XP)
-        padding: 0 0.3rem 0 0.8rem;
+        // right gap matches the gap above the close button (it is centred in the
+        // 2.9rem bar → 0.5rem clear top/bottom, so 0.5rem on the right too)
+        padding: 0 0.5rem 0 0.8rem;
         background: linear-gradient(180deg, #2e61e4 0%, #5292f7 6%, #255ae1 25%, #2f6bf6 80%, #1133a0 100%);
         box-shadow: inset 0.1rem 0 0.3rem #162abe, inset -0.1rem 0 0.3rem #162ab0;
         border-radius: 0.8rem 0.8rem 0 0;
