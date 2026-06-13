@@ -2,9 +2,9 @@
 
 An authentic replication of Windows XP's Solitaire game, built with **React** and **TypeScript**.
 
-It runs as a standalone full-screen browser game experience, and is also published as a `<Solitaire />` component for embedding in other apps. It was originally built as part of my [React XP](https://github.com/Cyanoxide/react-xp)) project before being seperated out into it's own repo.
+It runs as a standalone full-screen browser game experience, and is also published as a `<Solitaire />` component for embedding in other apps. It was originally built as part of my [React XP](https://github.com/Cyanoxide/react-xp) project before being seperated out into it's own repo.
 
-I've seperated this out to make it easier for others to use it as part of their own projects. For example, if you're building your own OS clone, like my [React XP](https://github.com/Cyanoxide/react-xp)), you are welcome to use this.
+I've seperated this out to make it easier for others to use it as part of their own projects. For example, if you're building your own OS clone, like my [React XP](https://github.com/Cyanoxide/react-xp), you are welcome to use this.
 
 ## Features
 
