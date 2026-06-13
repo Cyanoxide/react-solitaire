@@ -137,6 +137,7 @@
     .dialogTitleBar {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         height: 2.9rem;
         margin: 0 -0.3rem;
         padding: 0 0.8rem;
@@ -150,30 +151,32 @@
         text-shadow: 0.1rem 0.1rem 0.1rem #162abe;
     }
 
-    // XP-style red close button in the dialog title bar
+    // Matches react-xp's window close control (shared window UI sprite)
     .dialogClose {
-        margin-left: auto;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.2rem;
+        position: relative;
+        text-indent: -999rem;
+        overflow: hidden;
+        width: 1.9rem;
         height: 1.9rem;
         padding: 0;
-        border: 0.1rem solid #f4c9c2;
+        border: 0.1rem solid #fff;
         border-radius: 0.3rem;
-        background: linear-gradient(180deg, #f3a496 0%, #e15a48 45%, #c8341d 100%);
-        color: #fff;
-        font-size: 1.1rem;
-        font-weight: bold;
         cursor: pointer;
-        box-shadow: inset 0 0.1rem 0 #ffffff66;
+        box-shadow: inset 0 0 0 0.1rem #ae452744, inset 0.2rem 0.2rem 0.5rem #e4a491, inset -0.2rem -0.2rem 0.1rem #ae4527;
+        background: radial-gradient(circle at 85% 85%, #cd512e 50%, #d45b34 70%, #e4a491 100%);
 
-        &:hover {
-            filter: brightness(1.08);
+        &:after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url("/spritesheet__window_ui.png");
+            background-size: 7rem 1.7rem;
+            background-position: -5.35rem center;
+            background-repeat: no-repeat;
         }
 
-        &:active {
-            filter: brightness(0.95);
+        &:hover {
+            filter: brightness(1.15);
         }
     }
 
@@ -188,13 +191,6 @@
         display: flex;
         justify-content: center;
         gap: 0.9rem;
-
-        button {
-            min-width: 8rem;
-            height: 2.6rem;
-            font-size: 1.2rem;
-            text-align: center;
-        }
     }
 
     // Deal-again prompt: centre the question above the buttons
@@ -215,28 +211,77 @@
         margin-bottom: 1.4rem;
     }
 
+    // Group box matching react-xp's Settings (.inputGroup): rounded border with
+    // an absolutely-positioned, non-bold label that breaks the top border
     .optionGroup {
         flex: 1;
+        position: relative;
         border: 0.1rem solid #aca899;
-        border-radius: 0.2rem;
-        padding: 1rem 1.4rem 1.4rem;
+        border-radius: 0.5rem;
+        padding: 1.4rem 1.2rem 1rem;
+    }
 
-        legend {
-            padding: 0 0.4rem;
-            font-weight: 600;
-        }
+    .optionGroupLabel {
+        position: absolute;
+        top: 0;
+        left: 0.8rem;
+        transform: translateY(-54%);
+        padding: 0 0.4rem;
+        background: #ece9d8;
+        color: #224ece;
+        font-size: 1rem;
+    }
 
-        label {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            margin: 0.5rem 0;
+    // Left-aligned rows with XP-style controls (green accent, as react-xp uses)
+    .optionRow {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        margin: 0.6rem 0;
+        cursor: pointer;
+        white-space: nowrap;
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            position: relative;
+            width: 1.3rem;
+            height: 1.3rem;
+            margin: 0;
+            flex-shrink: 0;
+            background: #fff;
+            border: 0.1rem solid #7f9db9;
+            box-shadow: inset 0.1rem 0.1rem 0.15rem #00000022;
             cursor: pointer;
-            white-space: nowrap;
         }
 
-        input {
-            accent-color: #2f6bf6;
+        input[type="radio"] {
+            border-radius: 50%;
+
+            &:checked::after {
+                content: "";
+                position: absolute;
+                inset: 0.3rem;
+                border-radius: 50%;
+                background: #4a9e3a;
+            }
+        }
+
+        input[type="checkbox"] {
+            border-radius: 0.2rem;
+
+            &:checked::after {
+                content: "";
+                position: absolute;
+                left: 0.38rem;
+                top: 0.05rem;
+                width: 0.35rem;
+                height: 0.7rem;
+                border: solid #4a9e3a;
+                border-width: 0 0.2rem 0.2rem 0;
+                transform: rotate(45deg);
+            }
         }
     }
 

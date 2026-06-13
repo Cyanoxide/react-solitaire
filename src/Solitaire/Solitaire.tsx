@@ -223,19 +223,19 @@ const Solitaire = () => {
                     <div className={styles.dialog}>
                         <div className={styles.dialogTitleBar}>
                             <span>Options</span>
-                            <button type="button" className={styles.dialogClose} aria-label="Close" onClick={() => setOptionsOpen(false)}>✕</button>
+                            <button type="button" className={styles.dialogClose} aria-label="Close" onClick={() => setOptionsOpen(false)}>Close</button>
                         </div>
                         <div className={styles.dialogBody}>
                             <div className={styles.optionGroups}>
-                                <fieldset className={styles.optionGroup}>
-                                    <legend>Draw</legend>
-                                    <label><input type="radio" name="draw" checked={pendingDraw === 1} onChange={() => setPendingDraw(1)} /> Draw One</label>
-                                    <label><input type="radio" name="draw" checked={pendingDraw === 3} onChange={() => setPendingDraw(3)} /> Draw Three</label>
-                                </fieldset>
-                                <fieldset className={styles.optionGroup}>
-                                    <legend>Scoring</legend>
-                                    <label><input type="checkbox" checked={pendingScoring} onChange={(event) => setPendingScoring(event.target.checked)} /> Standard</label>
-                                </fieldset>
+                                <div className={styles.optionGroup}>
+                                    <span className={styles.optionGroupLabel}>Draw</span>
+                                    <label className={styles.optionRow}><input type="radio" name="draw" checked={pendingDraw === 1} onChange={() => setPendingDraw(1)} /><span>Draw One</span></label>
+                                    <label className={styles.optionRow}><input type="radio" name="draw" checked={pendingDraw === 3} onChange={() => setPendingDraw(3)} /><span>Draw Three</span></label>
+                                </div>
+                                <div className={styles.optionGroup}>
+                                    <span className={styles.optionGroupLabel}>Scoring</span>
+                                    <label className={styles.optionRow}><input type="checkbox" checked={pendingScoring} onChange={(event) => setPendingScoring(event.target.checked)} /><span>Standard</span></label>
+                                </div>
                             </div>
                             <div className={styles.dialogButtons}>
                                 <Button data-primary onClick={() => { setDrawCount(pendingDraw); setScoring(pendingScoring); setOptionsOpen(false); }}>OK</Button>
