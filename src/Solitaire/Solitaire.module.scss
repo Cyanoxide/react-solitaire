@@ -230,6 +230,12 @@
         }
     }
 
+    // The card-back dialog wants to be wide enough for comfortably-sized tiles,
+    // but never wider than the container (.dialog already caps max-width)
+    .deckDialog {
+        width: min(48rem, calc(100% - 1.6rem));
+    }
+
     // Select Card Back dialog: 2 x 6 grid of selectable backs
     .cardBackGrid {
         display: grid;

@@ -303,7 +303,7 @@ const Solitaire = () => {
                     </div>
                 )}
                 {deckDialogBack !== null && (
-                    <div className={styles.dialog}>
+                    <div className={`${styles.dialog} ${styles.deckDialog}`}>
                         <div className={styles.dialogTitleBar}>
                             <span>Select Card Back</span>
                             <button type="button" className={styles.dialogClose} aria-label="Close" onClick={() => setDeckDialogBack(null)}>Close</button>
