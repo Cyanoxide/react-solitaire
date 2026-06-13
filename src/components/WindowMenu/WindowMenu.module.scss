@@ -23,6 +23,8 @@
         left: -0.15rem;
         top: -0.15rem;
         margin: 0 0.25rem;
+        padding: 0;
+        list-style: none;
     }
 
     .menuItem {
@@ -35,7 +37,15 @@
             cursor: not-allowed;
         }
 
+        // Render as flat text rather than a native button (the host page is
+        // not assumed to provide a global form reset)
         button {
+            border: none;
+            background: none;
+            padding: 0;
+            margin: 0;
+            font: inherit;
+            color: inherit;
             cursor: not-allowed;
         }
     }

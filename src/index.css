@@ -29,12 +29,14 @@ button {
     font-family: inherit;
 }
 
-/* Mirrors react-xp's window content area so the component lays out the same
-   full-screen as it does inside a window (menu bar + felt fill the viewport). */
+/* Full-screen shell: felt and menu bleed edge to edge. The board itself is
+   capped and centred via --board-max-width (keeps cards a sensible size on
+   wide screens); react-xp leaves this unset so the board fills the window. */
 .solitaire-app {
     display: flex;
     flex-direction: column;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    --board-max-width: 88rem;
 }
