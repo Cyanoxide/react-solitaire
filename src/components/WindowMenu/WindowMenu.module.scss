@@ -1,10 +1,18 @@
 .windowMenu {
     display: flex;
     justify-content: flex-start;
+    align-items: stretch;
     background: #f1f0eb;
     border-bottom: 0.1rem solid #dedaca;
     color: #000;
     min-height: 2.3rem;
+
+    // Self-contained box model (the menu sits outside .solitaire, so it can't
+    // rely on that subtree's reset or the host page's)
+    &,
+    * {
+        box-sizing: border-box;
+    }
 
     @include theme-color("silver") {
         background-color: #f1f0f3;
@@ -12,24 +20,26 @@
     }
 
     .menuInner {
-        position: relative;
+        display: flex;
+        align-items: stretch;
         overflow: hidden;
         width: 100%;
     }
 
     .menuList {
         display: flex;
-        position: absolute;
-        left: -0.15rem;
-        top: -0.15rem;
-        margin: 0 0.25rem;
+        align-items: stretch;
+        margin: 0;
         padding: 0;
         list-style: none;
     }
 
     .menuItem {
-        margin: 0.25rem 0;
-        padding: 0.25rem 0.625rem;
+        display: flex;
+        align-items: center;
+        // 1px gap on every side so the menu bar stays visible around the hover
+        margin: 0.1rem;
+        padding: 0 0.55rem;
 
         &:hover {
             color: #fff;
