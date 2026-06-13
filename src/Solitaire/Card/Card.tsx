@@ -10,10 +10,12 @@ interface Card {
     suit?: Suit;
     rank?: Rank;
     isFaceUp?: boolean;
+    // false for the buried waste cards in Draw three: only the top card is playable
+    isPlayable?: boolean;
     setBoardState?: Dispatch<SetStateAction<BoardState>>;
 }
 
-const Card = ({ suit, rank, isFaceUp = false, setBoardState = () => {} }: Card) => {
+const Card = ({ suit, rank, isFaceUp = false, isPlayable = true, setBoardState = () => {} }: Card) => {
     const lastClickTimeRef = useRef<number>(0);
     
     const onDoubleClickHandler = (event: React.MouseEvent<HTMLElement>) => {
@@ -84,7 +86,7 @@ const Card = ({ suit, rank, isFaceUp = false, setBoardState = () => {} }: Card) 
         const rank = Number(card.dataset.rank);
         const suit = card.dataset.suit as Suit;
 
-        if (!rank || !suit || !isFaceUp) return;
+        if (!rank || !suit || !isFaceUp || !isPlayable) return;
 
         const currentTime = Date.now();
         const timeSinceLastClick = currentTime - lastClickTimeRef.current;

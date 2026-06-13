@@ -181,6 +181,16 @@ const Solitaire = () => {
         setBoardState(createInitialBoardState());
     };
 
+    // Apply the Options dialog. Changing the draw type or scoring re-deals the
+    // board (as the real game does), so the new rules start from a fresh deal.
+    const applyOptions = () => {
+        const changed = pendingDraw !== drawCount || pendingScoring !== scoring;
+        setDrawCount(pendingDraw);
+        setScoring(pendingScoring);
+        setOptionsOpen(false);
+        if (changed) handleNewGame();
+    };
+
     // Animation finished or was skipped: leave the table empty and ask to deal again
     const handleAnimationComplete = () => {
         setBoardState((prev) => ({
@@ -229,7 +239,8 @@ const Solitaire = () => {
                                 {boardState.deck.slice(0, 3).map((card) => <Card key={card.id} {...card}/>)}
                             </div>
                             <div className={styles.waste}>
-                                {boardState.waste.slice(-Math.abs(boardState.wasteCount)).map((card) => <Card key={card.id} rank={card.rank} suit={card.suit} isFaceUp={true} setBoardState={commitBoard}/>)}
+                                {/* show at most wasteCount cards, but never 0 (slice(-0) returns the whole pile) */}
+                                {boardState.waste.slice(-Math.max(1, boardState.wasteCount)).map((card, index, shown) => <Card key={card.id} rank={card.rank} suit={card.suit} isFaceUp={true} isPlayable={index === shown.length - 1} setBoardState={commitBoard}/>)}
                             </div>
                         </div>
                         <div className={styles.foundations}>
@@ -285,7 +296,7 @@ const Solitaire = () => {
                                 </div>
                             </div>
                             <div className={styles.dialogButtons}>
-                                <Button data-primary onClick={() => { setDrawCount(pendingDraw); setScoring(pendingScoring); setOptionsOpen(false); }}>OK</Button>
+                                <Button data-primary onClick={applyOptions}>OK</Button>
                                 <Button onClick={() => setOptionsOpen(false)}>Cancel</Button>
                             </div>
                         </div>
@@ -293,7 +304,10 @@ const Solitaire = () => {
                 )}
                 {deckDialogBack !== null && (
                     <div className={styles.dialog}>
-                        <div className={styles.dialogTitleBar}>Select Card Back</div>
+                        <div className={styles.dialogTitleBar}>
+                            <span>Select Card Back</span>
+                            <button type="button" className={styles.dialogClose} aria-label="Close" onClick={() => setDeckDialogBack(null)}>Close</button>
+                        </div>
                         <div className={styles.dialogBody}>
                             <div className={styles.cardBackGrid}>
                                 {Array.from({ length: CARD_BACK_COUNT }, (_, index) => (
