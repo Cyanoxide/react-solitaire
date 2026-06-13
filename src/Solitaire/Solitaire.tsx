@@ -83,6 +83,12 @@ const Solitaire = () => {
     const [boardState, setBoardState] = useState<BoardState>(createInitialBoardState);
     const [showDealPrompt, setShowDealPrompt] = useState(false);
     const [canUndo, setCanUndo] = useState(false);
+    // Applied options, plus the Options dialog's pending (unsaved) selections
+    const [drawCount, setDrawCount] = useState<1 | 3>(1);
+    const [scoring, setScoring] = useState(false);
+    const [optionsOpen, setOptionsOpen] = useState(false);
+    const [pendingDraw, setPendingDraw] = useState<1 | 3>(1);
+    const [pendingScoring, setPendingScoring] = useState(false);
     // Applied card-back index; deckDialogBack is the pending selection while the
     // Select Card Back dialog is open (null = closed)
     const [cardBack, setCardBack] = useState(0);
@@ -140,11 +146,14 @@ const Solitaire = () => {
     const handleDeckOnClick = () => {
         commitBoard((prev: BoardState) => {
             if (prev.deck.length) {
+                // Draw `drawCount` cards at once (Options: Draw one / Draw three)
+                const count = Math.min(drawCount, prev.deck.length);
+                const drawn = prev.deck.slice(prev.deck.length - count);
                 return {
                     ...prev,
-                    deck: prev.deck.slice(0, -1),
-                    waste: [...prev.waste, prev.deck[prev.deck.length - 1]],
-                    wasteCount: 3,
+                    deck: prev.deck.slice(0, prev.deck.length - count),
+                    waste: [...prev.waste, ...drawn],
+                    wasteCount: drawCount,
                 };
             }
 
@@ -192,7 +201,7 @@ const Solitaire = () => {
                 { label: "Undo", onClick: handleUndo, disabled: !canUndo },
                 { separator: true },
                 { label: "Deck...", onClick: () => setDeckDialogBack(cardBack) },
-                { label: "Options...", disabled: true },
+                { label: "Options...", onClick: () => { setPendingDraw(drawCount); setPendingScoring(scoring); setOptionsOpen(true); } },
                 { separator: true },
                 { label: "Exit", disabled: true },
             ],
@@ -242,6 +251,9 @@ const Solitaire = () => {
                     </div>
                 </main>
                 {boardState.win && <WinAnimation foundations={boardState.foundations} onCardLaunch={handleCardLaunch} onComplete={handleAnimationComplete} />}
+                {scoring && (
+                    <div className={styles.statusBar}>Score: {boardState.foundations.reduce((total, foundation) => total + foundation.length, 0) * 5}</div>
+                )}
                 {showDealPrompt && (
                     <div className={styles.dialog}>
                         <div className={styles.dialogTitleBar}>Solitaire</div>
@@ -250,6 +262,31 @@ const Solitaire = () => {
                             <div className={styles.dialogButtons}>
                                 <Button onClick={handleNewGame}>Yes</Button>
                                 <Button onClick={() => setShowDealPrompt(false)}>No</Button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {optionsOpen && (
+                    <div className={styles.dialog}>
+                        <div className={styles.dialogTitleBar}>
+                            <span>Options</span>
+                            <button type="button" className={styles.dialogClose} aria-label="Close" onClick={() => setOptionsOpen(false)}>Close</button>
+                        </div>
+                        <div className={styles.dialogBody}>
+                            <div className={styles.optionGroups}>
+                                <div className={styles.optionGroup}>
+                                    <span className={styles.optionGroupLabel}>Draw</span>
+                                    <label className={styles.optionRow}><input type="radio" name="draw" checked={pendingDraw === 1} onChange={() => setPendingDraw(1)} /><span>Draw One</span></label>
+                                    <label className={styles.optionRow}><input type="radio" name="draw" checked={pendingDraw === 3} onChange={() => setPendingDraw(3)} /><span>Draw Three</span></label>
+                                </div>
+                                <div className={styles.optionGroup}>
+                                    <span className={styles.optionGroupLabel}>Scoring</span>
+                                    <label className={styles.optionRow}><input type="checkbox" checked={pendingScoring} onChange={(event) => setPendingScoring(event.target.checked)} /><span>Standard</span></label>
+                                </div>
+                            </div>
+                            <div className={styles.dialogButtons}>
+                                <Button data-primary onClick={() => { setDrawCount(pendingDraw); setScoring(pendingScoring); setOptionsOpen(false); }}>OK</Button>
+                                <Button onClick={() => setOptionsOpen(false)}>Cancel</Button>
                             </div>
                         </div>
                     </div>

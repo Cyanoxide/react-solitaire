@@ -42,9 +42,10 @@
         display: flex;
         margin-left: -1.25cqw;
 
+        // Offset so each drawn card's top-left value stays visible (Draw three)
         &>div:not(:first-child) {
             margin-top: 0;
-            margin-left: -13.75cqw;
+            margin-left: -11cqw;
         }
     }
 
@@ -118,14 +119,14 @@
     }
 
     // Shared XP dialog chrome (matches the active window chrome in react-xp's
-    // Window.module.scss). Used by the deal-again prompt and the Deck dialog.
+    // Window.module.scss). Used by the deal-again prompt and the Options dialog.
     .dialog {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 4;
-        min-width: 22rem;
+        min-width: 28rem;
         background: #162abe;
         padding: 0 0.3rem 0.3rem;
         border-radius: 0.9rem 0.9rem 0.1rem 0.1rem;
@@ -136,6 +137,7 @@
     .dialogTitleBar {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         height: 2.9rem;
         margin: 0 -0.3rem;
         padding: 0 0.8rem;
@@ -149,16 +151,46 @@
         text-shadow: 0.1rem 0.1rem 0.1rem #162abe;
     }
 
+    // Matches react-xp's window close control (shared window UI sprite)
+    .dialogClose {
+        position: relative;
+        text-indent: -999rem;
+        overflow: hidden;
+        width: 1.9rem;
+        height: 1.9rem;
+        padding: 0;
+        border: 0.1rem solid #fff;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        box-shadow: inset 0 0 0 0.1rem #ae452744, inset 0.2rem 0.2rem 0.5rem #e4a491, inset -0.2rem -0.2rem 0.1rem #ae4527;
+        background: radial-gradient(circle at 85% 85%, #cd512e 50%, #d45b34 70%, #e4a491 100%);
+
+        &:after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url("/spritesheet__window_ui.png");
+            background-size: 7rem 1.7rem;
+            background-position: -5.35rem center;
+            background-repeat: no-repeat;
+        }
+
+        &:hover {
+            filter: brightness(1.15);
+        }
+    }
+
     .dialogBody {
         background: #ece9d8;
         color: #000;
         padding: 1.4rem 1.6rem 1.2rem;
+        font-size: 1.2rem;
     }
 
     .dialogButtons {
         display: flex;
         justify-content: center;
-        gap: 0.75rem;
+        gap: 0.9rem;
     }
 
     // Deal-again prompt: centre the question above the buttons
@@ -198,5 +230,105 @@
             outline: 0.2rem solid #2f6bf6;
             outline-offset: 0.1rem;
         }
+    }
+
+    // Options dialog: Draw and Scoring groups sit side by side
+    .optionGroups {
+        display: flex;
+        gap: 1.2rem;
+        margin-bottom: 1.4rem;
+    }
+
+    // Group box matching react-xp's Settings (.inputGroup): rounded border with
+    // an absolutely-positioned, non-bold label that breaks the top border
+    .optionGroup {
+        flex: 1;
+        position: relative;
+        border: 0.1rem solid #aca899;
+        border-radius: 0.5rem;
+        padding: 1.4rem 1.2rem 1rem;
+    }
+
+    .optionGroupLabel {
+        position: absolute;
+        top: 0;
+        left: 0.8rem;
+        transform: translateY(-54%);
+        padding: 0 0.4rem;
+        background: #ece9d8;
+        color: #224ece;
+        font-size: 1rem;
+    }
+
+    // Left-aligned rows with XP-style controls (green accent, as react-xp uses)
+    .optionRow {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        margin: 0.6rem 0;
+        cursor: pointer;
+        white-space: nowrap;
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            position: relative;
+            width: 1.3rem;
+            height: 1.3rem;
+            margin: 0;
+            flex-shrink: 0;
+            background: #fff;
+            border: 0.1rem solid #7f9db9;
+            box-shadow: inset 0.1rem 0.1rem 0.15rem #00000022;
+            cursor: pointer;
+        }
+
+        input[type="radio"] {
+            border-radius: 50%;
+
+            &:checked::after {
+                content: "";
+                position: absolute;
+                inset: 0.3rem;
+                border-radius: 50%;
+                background: #4a9e3a;
+            }
+        }
+
+        input[type="checkbox"] {
+            border-radius: 0.2rem;
+
+            &:checked::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 0.35rem;
+                height: 0.7rem;
+                border: solid #4a9e3a;
+                border-width: 0 0.2rem 0.2rem 0;
+                // centre on the box, lifted slightly so the rotated tick reads centred
+                transform: translate(-50%, -60%) rotate(45deg);
+            }
+        }
+    }
+
+    // Score read-out along the bottom of the felt when scoring is enabled
+    .statusBar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0.3rem 1.2rem;
+        background: #ece9d8;
+        border-top: 0.1rem solid #b6b6a9;
+        color: #000;
+        font-size: 1.2rem;
+        font-weight: bold;
     }
 }
