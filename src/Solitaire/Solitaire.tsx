@@ -238,9 +238,13 @@ const Solitaire = () => {
                             <div className={styles.deck} onClick={handleDeckOnClick}>
                                 {boardState.deck.slice(0, 3).map((card) => <Card key={card.id} {...card}/>)}
                             </div>
-                            <div className={styles.waste}>
-                                {/* show at most wasteCount cards, but never 0 (slice(-0) returns the whole pile) */}
-                                {boardState.waste.slice(-Math.max(1, boardState.wasteCount)).map((card, index, shown) => <Card key={card.id} rank={card.rank} suit={card.suit} isFaceUp={true} isPlayable={index === shown.length - 1} setBoardState={commitBoard}/>)}
+                            <div className={styles.waste} data-draw={drawCount}>
+                                {/* Show the drawn fan (wasteCount cards), but always render at
+                                    least 2 so the card beneath the top one is there to reveal
+                                    when it is dragged. In draw-one the extra card stacks exactly
+                                    behind the top (see .waste[data-draw="1"]); in draw-three the
+                                    slice naturally keeps the fan backed. */}
+                                {boardState.waste.slice(-Math.max(2, boardState.wasteCount)).map((card, index, shown) => <Card key={card.id} rank={card.rank} suit={card.suit} isFaceUp={true} isPlayable={index === shown.length - 1} setBoardState={commitBoard}/>)}
                             </div>
                         </div>
                         <div className={styles.foundations}>

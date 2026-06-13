@@ -47,6 +47,12 @@
             margin-top: 0;
             margin-left: -11cqw;
         }
+
+        // Draw one: the card beneath sits exactly behind the top card (full
+        // card-width overlap), so dragging the top reveals it with no empty gap
+        &[data-draw="1"]>div:not(:first-child) {
+            margin-left: -14.28cqw;
+        }
     }
 
     .deck {
